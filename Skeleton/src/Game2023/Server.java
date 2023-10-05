@@ -18,7 +18,7 @@ public class Server {
         }
     }
 
-    public void writeMethod(String s) throws IOException {
+    public static void writeMethod(String s) throws IOException {
         for(ServerThread thread : threads){
             thread.writeBackToGUI(s);
         }

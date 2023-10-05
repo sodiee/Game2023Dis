@@ -128,6 +128,7 @@ public class GUI extends Application {
 			ClientThread ct = new ClientThread(clientSocket);
 			outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			ct.start();
 
 			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				switch (event.getCode()) {
