@@ -1,5 +1,6 @@
 package Game2023;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class Server {
         }
     }
 
-    public void writeMethod(String s){
+    public void writeMethod(String s) throws IOException {
         for(ServerThread thread : threads){
             thread.writeBackToGUI(s);
         }
