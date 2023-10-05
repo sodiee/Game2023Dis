@@ -20,14 +20,13 @@ public class ServerThread extends Thread {
 
     public void run() {
         try {
-            server = new Server();
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connsocket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(connsocket.getOutputStream());
-            outToClientInstans = outToClient;
+
 
             while(true) {
                 String sentence = inFromClient.readLine();
-                server.writeMethod(sentence);
+                Server.writeMethod(sentence);
             }
 
         } catch (IOException e) {
@@ -36,7 +35,7 @@ public class ServerThread extends Thread {
     }
 
     public void writeBackToGUI(String s) throws IOException {
-        outToClientInstans.writeBytes(s);
+        outToClientInstans.writeBytes(s + "\n");
     }
 
 

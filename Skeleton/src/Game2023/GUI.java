@@ -160,8 +160,6 @@ public class GUI extends Application {
 					playerMoved(+1,0,"right");
 					try {
 						outToServer.writeBytes("RIGHT" + '\n');
-						String modifiedSentence = inFromServer.readLine();
-						System.out.println("FROM SERVER: " + modifiedSentence);
 					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}
