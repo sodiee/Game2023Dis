@@ -20,11 +20,6 @@ public class ServerThread extends Thread {
 			String[] s = clientSentence.split(" ");
 			byte[] bbb = read(s[1]);
 
-			outToClient.writeBytes("HTTP 200 OK \n");
-			outToClient.writeBytes("Content-Type: " + contentType((s[1])));
-			outToClient.writeBytes("Connection: close \n");
-			outToClient.writeBytes("\n");
-			outToClient.write(bbb);
 
 			} catch(IOException e){
 				e.printStackTrace();
@@ -34,23 +29,6 @@ public class ServerThread extends Thread {
 		}
 
 
-		public String contentType (String docuname){
-			if (docuname.endsWith(".html")) {
-				return ("Content-Type: text/html\n");
-			} else if (docuname.endsWith(".gif")) {
-				return ("Content-Type: image/gif\n");
-			} else if (docuname.endsWith(".png")) {
-				return ("Content-Type: image/png\n");
-			} else if (docuname.endsWith(".jpg")) {
-				return ("Content-Type: image/jpg\n");
-			} else if (docuname.endsWith(".js")) {
-				return ("Content-Type: text/javascript\n");
-			} else if (docuname.endsWith(".css")) {
-				return ("Content-Type: text/css\n");
-			} else {
-				return ("Content-Type: text/plain\n");
-			}
-		}
 
 
 		public byte[] read (String aInputFileName) throws FileNotFoundException {
