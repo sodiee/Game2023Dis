@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class ServerThread {
+public class ServerThread extends Thread{
 
     Socket connsocket;
 

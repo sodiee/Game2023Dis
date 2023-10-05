@@ -16,10 +16,9 @@ public class Server {
 			thread.start();
 			tråde.add((thread));
 
-			for(ServerThread serverThread : tråde){
-
 			}
 		}
 	}
+
 
 }
