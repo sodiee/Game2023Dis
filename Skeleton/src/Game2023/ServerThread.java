@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-import static Game2023.Server.writeMethod;
-
 public class ServerThread extends Thread {
 
     Socket connsocket;
+
+    Server server;
 
     DataOutputStream outToClientInstans;
 
@@ -22,11 +22,11 @@ public class ServerThread extends Thread {
         try {
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connsocket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(connsocket.getOutputStream());
-            outToClientInstans = outToClient;
+
 
             while(true) {
                 String sentence = inFromClient.readLine();
-                writeMethod(sentence);
+                Server.writeMethod(sentence);
             }
 
         } catch (IOException e) {
@@ -35,7 +35,7 @@ public class ServerThread extends Thread {
     }
 
     public void writeBackToGUI(String s) throws IOException {
-        outToClientInstans.writeBytes(s);
+        outToClientInstans.writeBytes(s + "\n");
     }
 
 
