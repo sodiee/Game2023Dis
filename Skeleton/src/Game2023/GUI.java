@@ -1,5 +1,9 @@
 package Game2023;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +32,12 @@ public class GUI extends Application {
 
 	private Label[][] fields;
 	private TextArea scoreList;
+
+	Socket clientSocket;
+	BufferedReader inFromServer;
+	DataOutputStream outToServer;
+
+
 	
 	private  String[] board = {    // 20x20
 			"wwwwwwwwwwwwwwwwwwww",
@@ -113,12 +123,50 @@ public class GUI extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
+			clientSocket = new Socket("localhost", 6789);
+			outToServer = new DataOutputStream(clientSocket.getOutputStream());
+			inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
 			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				switch (event.getCode()) {
-				case UP:    playerMoved(0,-1,"up");    break;
-				case DOWN:  playerMoved(0,+1,"down");  break;
-				case LEFT:  playerMoved(-1,0,"left");  break;
-				case RIGHT: playerMoved(+1,0,"right"); break;
+				case UP:
+					playerMoved(0,-1,"up");
+					try {
+						outToServer.writeBytes("UP" + '\n');
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+					break;
+
+				case DOWN:
+					playerMoved(0,+1,"down");
+					try {
+						outToServer.writeBytes("DOWN" + '\n');
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+					break;
+
+				case LEFT:
+					playerMoved(-1,0,"left");
+					try {
+						outToServer.writeBytes("LEFT" + '\n');
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+					break;
+
+				case RIGHT:
+					playerMoved(+1,0,"right");
+					try {
+						outToServer.writeBytes("RIGHT" + '\n');
+						String modifiedSentence = inFromServer.readLine();
+						System.out.println("FROM SERVER: " + modifiedSentence);
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+					break;
+
 				default: break;
 				}
 			});
