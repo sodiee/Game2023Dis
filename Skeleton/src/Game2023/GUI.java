@@ -2,6 +2,7 @@ package Game2023;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -124,6 +125,7 @@ public class GUI extends Application {
 			primaryStage.show();
 
 			clientSocket = new Socket("localhost", 6789);
+			ClientThread ct = new ClientThread(clientSocket);
 			outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
@@ -241,6 +243,28 @@ public class GUI extends Application {
 		return null;
 	}
 
+	class ClientThread extends Thread {
+		Socket socket;
+
+		ClientThread(Socket clientSocket) {
+			this.socket = clientSocket;
+		}
+
+		public void run() {
+			String sentence;
+			String modifiedSentence;
+			while (true) {
+				try {
+					sentence = inFromServer.readLine();
+					outToServer.writeBytes(sentence + '\n');
+					modifiedSentence = inFromServer.readLine();
+					System.out.println("FROM SERVER: " + modifiedSentence);
+				} catch (IOException e) {
+					System.out.println(e.getMessage());
+				}
+			}
+		}
+	}
 	
 }
 
