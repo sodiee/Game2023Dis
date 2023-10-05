@@ -265,6 +265,8 @@ public class GUI extends Application {
 				}
 			}
 		}
+
+		///platform.runlater()
 	}
 	
 }
