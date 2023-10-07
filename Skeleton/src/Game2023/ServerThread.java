@@ -10,7 +10,7 @@ public class ServerThread extends Thread {
 
     Socket connsocket;
 
-    Server server;
+    Player playerToUpdate = null;
 
     DataOutputStream outToClientInstans;
 
@@ -18,16 +18,19 @@ public class ServerThread extends Thread {
         this.connsocket = connSocket;
     }
 
+
     public void run() {
         try {
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connsocket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(connsocket.getOutputStream());
 
 
+
             while(true) {
                 String sentence = inFromClient.readLine();
-                Server.writeMethod(sentence);
-            }
+
+                Server.updatePlayerPosition(this, sentence);//TODO IKKE THIS, FIND KLIENTTRÅDEN
+                }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -38,5 +41,8 @@ public class ServerThread extends Thread {
         outToClientInstans.writeBytes(s + "\n");
     }
 
+    public void setPlayerToUpdate(Player player) {
+        this.playerToUpdate = player;
+    }
 
 }
