@@ -271,6 +271,7 @@ public class GUI extends Application {
 
 		ClientThread(Socket clientSocket) {
 			this.socket = clientSocket;
+			//TODO måske tilføjelse og initializeirng af spiller hernede?
 		}
 
 		public void run() {
