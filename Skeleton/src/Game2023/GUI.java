@@ -34,6 +34,8 @@ public class GUI extends Application {
 	private Label[][] fields;
 	private TextArea scoreList;
 
+	private byte[] msgArr = new byte[2];
+
 	Socket clientSocket;
 	BufferedReader inFromServer;
 	DataOutputStream outToServer;
@@ -135,6 +137,11 @@ public class GUI extends Application {
 				case UP:
 					playerMoved(0,-1,"up");
 					try {
+						/*
+						get navn på spiller + direction og send til ST, ST opdaterer
+						så til andre GUI'er.
+
+						 */
 						outToServer.writeBytes("UP" + '\n');
 					} catch (Exception e) {
 						throw new RuntimeException(e);
@@ -144,6 +151,11 @@ public class GUI extends Application {
 				case DOWN:
 					playerMoved(0,+1,"down");
 					try {
+						/*
+						get navn på spiller + direction og send til ST, ST opdaterer
+						så til andre GUI'er.
+
+						 */
 						outToServer.writeBytes("DOWN" + '\n');
 					} catch (Exception e) {
 						throw new RuntimeException(e);
@@ -153,6 +165,11 @@ public class GUI extends Application {
 				case LEFT:
 					playerMoved(-1,0,"left");
 					try {
+						/*
+						get navn på spiller + direction og send til ST, ST opdaterer
+						så til andre GUI'er.
+
+						 */
 						outToServer.writeBytes("LEFT" + '\n');
 					} catch (Exception e) {
 						throw new RuntimeException(e);
@@ -162,6 +179,11 @@ public class GUI extends Application {
 				case RIGHT:
 					playerMoved(+1,0,"right");
 					try {
+						/*
+						get navn på spiller + direction og send til ST, ST opdaterer
+						så til andre GUI'er.
+
+						 */
 						outToServer.writeBytes("RIGHT" + '\n');
 					} catch (Exception e) {
 						throw new RuntimeException(e);
