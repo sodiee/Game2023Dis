@@ -10,8 +10,6 @@ public class ServerThread extends Thread {
 
     Socket connsocket;
 
-    Player playerToUpdate = null;
-
     DataOutputStream outToClientInstans;
 
     public ServerThread(Socket connSocket) {

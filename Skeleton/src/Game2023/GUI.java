@@ -271,7 +271,6 @@ public class GUI extends Application {
 
 		ClientThread(Socket clientSocket) {
 			this.socket = clientSocket;
-			//TODO måske tilføjelse og initializeirng af spiller hernede?
 		}
 
 		public void run() {
@@ -282,6 +281,7 @@ public class GUI extends Application {
 					sentence = inFromServer.readLine();
 					outToServer.writeBytes(sentence + '\n');
 					modifiedSentence = inFromServer.readLine();
+					playerMoved(me.getXpos() - 1, me.getYpos() - 1, modifiedSentence, me);
 					System.out.println("FROM SERVER: " + modifiedSentence);
 				} catch (IOException e) {
 					System.out.println(e.getMessage());

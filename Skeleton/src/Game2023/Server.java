@@ -11,6 +11,8 @@ public class Server {
     static List<ServerThread> threads = new ArrayList<>();
     public static void main(String[] args) throws Exception {
         ServerSocket welcomeSocket = new ServerSocket(6789);
+
+
         while (true) {
             Socket connectionSocket = welcomeSocket.accept();
             ServerThread thread = new ServerThread(connectionSocket);
