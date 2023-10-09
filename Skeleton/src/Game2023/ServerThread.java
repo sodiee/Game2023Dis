@@ -7,21 +7,20 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class ServerThread extends Thread {
-
     Socket connsocket;
+    BufferedReader inFromClient;
+    DataOutputStream outToClient;
 
-    DataOutputStream outToClientInstans;
 
     public ServerThread(Socket connSocket) {
         this.connsocket = connSocket;
     }
 
-
     public void run() {
         try {
-            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connsocket.getInputStream()));
-            DataOutputStream outToClient = new DataOutputStream(connsocket.getOutputStream());
-            this.outToClientInstans = outToClient;
+            inFromClient = new BufferedReader(new InputStreamReader(connsocket.getInputStream()));
+            outToClient = new DataOutputStream(connsocket.getOutputStream());
+
 
             while(true) {
                 String sentence = inFromClient.readLine();
@@ -35,6 +34,6 @@ public class ServerThread extends Thread {
     }
 
     public void writeBackToGUI(String s) throws IOException {
-        outToClientInstans.writeBytes(s + "\n");
+        outToClient.writeBytes(s + "\n");
     }
 }

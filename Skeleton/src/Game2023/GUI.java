@@ -32,17 +32,17 @@ public class GUI extends Application {
     public static Player me;
     public static List<Player> players = new ArrayList<Player>();
 
-    private Label[][] fields;
+    private static Label[][] fields;
     private TextArea scoreList;
 
     private byte[] msgArr = new byte[2];
 
     Socket clientSocket;
-    BufferedReader inFromServer;
+    static BufferedReader inFromServer;
     DataOutputStream outToServer;
 
 
-    private String[] board = {    // 20x20
+    private static String[] board = {    // 20x20
             "wwwwwwwwwwwwwwwwwwww",
             "w        ww        w",
             "w w  w  www w  w  ww",
@@ -136,62 +136,41 @@ public class GUI extends Application {
             scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 switch (event.getCode()) {
                     case UP:
-                        playerMoved(0, -1, "up", me.name);
                         try {
-						/*
-						get navn på spiller + direction og send til ST, ST opdaterer
-						så til andre GUI'er.
-
-						 */
                             outToServer.writeBytes("UP " +  me.name + '\n');
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
+                        // Opdater din egen spillers position lokalt
+                        playerMoved(0, -1, "UP", me);
                         break;
-
                     case DOWN:
-                        playerMoved(0, +1, "down", me.name);
                         try {
-						/*
-						get navn på spiller + direction og send til ST, ST opdaterer
-						så til andre GUI'er.
-
-						 */
                             outToServer.writeBytes("DOWN " + me.name + '\n');
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
+                        // Opdater din egen spillers position lokalt
+                        playerMoved(0, 1, "DOWN", me);
                         break;
-
                     case LEFT:
-                        playerMoved(-1, 0, "left", me.name);
                         try {
-						/*
-						get navn på spiller + direction og send til ST, ST opdaterer
-						så til andre GUI'er.
-
-						 */
                             outToServer.writeBytes("LEFT " + me.name + '\n');
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
+                        // Opdater din egen spillers position lokalt
+                        playerMoved(-1, 0, "LEFT", me);
                         break;
-
                     case RIGHT:
-                        playerMoved(+1, 0, "right", me.name);
                         try {
-						/*
-						get navn på spiller + direction og send til ST, ST opdaterer
-						så til andre GUI'er.
-
-						 */
-                            System.out.println("første playermoved");
                             outToServer.writeBytes("RIGHT " + me.name + '\n');
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
+                        // Opdater din egen spillers position lokalt
+                        playerMoved(1, 0, "RIGHT", me);
                         break;
-
                     default:
                         break;
                 }
@@ -199,13 +178,13 @@ public class GUI extends Application {
 
             // Setting up standard players
 
-            me = new Player("Orville", 14, 15, "up");
+            me = new Player("Lucas", 9, 4, "up");
             players.add(me);
-            fields[14][15].setGraphic(new ImageView(hero_up));
-
-            Player harry = new Player("Harry", 9, 4, "up");
-            players.add(harry);
             fields[9][4].setGraphic(new ImageView(hero_up));
+
+            Player harry = new Player("Mikkel", 14, 15, "up");
+            players.add(harry);
+            fields[14][15].setGraphic(new ImageView(hero_up));
 
             scoreList.setText(getScoreList());
         } catch (Exception e) {
@@ -213,14 +192,9 @@ public class GUI extends Application {
         }
     }
 
-    public void playerMoved(int delta_x, int delta_y, String direction, String name) {
-		Player player = null;
+    public static void playerMoved(int delta_x, int delta_y, String direction, Player player) {
         System.out.println("playerMoved called with direction: " + direction);
-		for (Player p : players){
-			if(p.name.equals(name)){
-				player = p;
-			}
-		}
+
         player.direction = direction;
         int x = player.getXpos(), y = player.getYpos();
 
@@ -238,22 +212,22 @@ public class GUI extends Application {
                 x += delta_x;
                 y += delta_y;
 
-                if (direction.equals("right")) {
+                if (direction.equals("RIGHT")) {
                     System.out.println("Setting graphic to hero_right at x=" + x + ", y=" + y);
                     fields[x][y].setGraphic(new ImageView(hero_right));
                 }
                 ;
-                if (direction.equals("left")) {
+                if (direction.equals("LEFT")) {
                     System.out.println("Setting graphic to hero_left at x=" + x + ", y=" + y);
                     fields[x][y].setGraphic(new ImageView(hero_left));
                 }
                 ;
-                if (direction.equals("up")) {
+                if (direction.equals("UP")) {
                     System.out.println("Setting graphic to hero_up at x=" + x + ", y=" + y);
                     fields[x][y].setGraphic(new ImageView(hero_up));
                 }
                 ;
-                if (direction.equals("down")) {
+                if (direction.equals("DOWN")) {
                     System.out.println("Setting graphic to hero_down at x=" + x + ", y=" + y);
                     fields[x][y].setGraphic(new ImageView(hero_down));
                 }
@@ -263,8 +237,6 @@ public class GUI extends Application {
                 player.setYpos(y);
             }
         }
-        System.out.println("playerMoved completed");
-        scoreList.setText(getScoreList());
     }
 
     public String getScoreList() {
@@ -275,7 +247,7 @@ public class GUI extends Application {
         return b.toString();
     }
 
-    public Player getPlayerAt(int x, int y) {
+    public static Player getPlayerAt(int x, int y) {
         for (Player p : players) {
             if (p.getXpos() == x && p.getYpos() == y) {
                 return p;
@@ -284,7 +256,7 @@ public class GUI extends Application {
         return null;
     }
 
-    class ClientThread extends Thread {
+    static class ClientThread extends Thread {
         Socket socket;
 
         ClientThread(Socket clientSocket) {
@@ -296,46 +268,76 @@ public class GUI extends Application {
                 try {
                     /*sentence = inFromServer.readLine();
                     outToServer.writeBytes(sentence + '\n');*/
-					String sentence = inFromServer.readLine();
+                    String sentence = inFromServer.readLine();
                     String direction = sentence.split(" ")[0];
-					String name = sentence.split(" ")[1];
+
+                    String name = sentence.split(" ")[1];
 
 
-                    switch (direction) {
-                        case "UP":
+                    if (!name.equals(me.name)) {
+                        Player playerToBeMoved = null;
+                        for (Player p : players) {
+                            if (p.name.equals(name)) {
+                                playerToBeMoved = p;
+                            }
+                        }
+
+                        if (playerToBeMoved != null) {
+                            Player playerToBeMovedFinal = playerToBeMoved;
                             Platform.runLater(() -> {
-                                playerMoved(0, -1, direction, name);
-                            });
-                            break;
+                                System.out.println(name);
+                                System.out.println(direction);
 
-                        case "DOWN":
-                            Platform.runLater(() -> {
-                                playerMoved(0, +1, direction, name);
+                                if (direction.equals("UP")) {
+                                    playerMoved(0, -1, "UP", playerToBeMovedFinal);
+                                }
+                                if (direction.equals("DOWN")) {
+                                    playerMoved(0, +1, "DOWN", playerToBeMovedFinal);
+                                }
+                                if (direction.equals("LEFT")) {
+                                    playerMoved(-1, 0, "LEFT", playerToBeMovedFinal);
+                                }
+                                if (direction.equals("RIGHT")) {
+                                    playerMoved(+1, 0, "RIGHT", playerToBeMovedFinal);
+                                }
                             });
-                            break;
+/*
+                                switch (direction) {
+                                    case "UP":
+                                        Player finalPlayerToBeMoved1 = playerToBeMoved;
+                                        playerMoved(0, -1, direction, finalPlayerToBeMoved1);
+                                        break;
 
-                        case "LEFT":
-                            Platform.runLater(() -> {
-                                playerMoved(-1, 0, direction, name);
-                            });
-                            break;
+                                    case "DOWN":
+                                        Player finalPlayerToBeMoved = playerToBeMoved;
+                                        playerMoved(0, +1, direction, finalPlayerToBeMoved);
+                                        break;
 
-                        case "RIGHT":
-                            System.out.println("anden swithc case: " + direction);
-                            Platform.runLater(() -> {
-                                playerMoved(+1, 0, direction, name);
-                            });
-                            break;
+                                    case "LEFT":
+                                        Player finalPlayerToBeMoved2 = playerToBeMoved;
+                                        playerMoved(-1, 0, direction, finalPlayerToBeMoved2);
+                                        break;
 
-                        default:
-                            break;
+                                    case "RIGHT":
+                                        System.out.println("anden swithc case: " + direction);
+                                        Player finalPlayerToBeMoved3 = playerToBeMoved;
+                                        playerMoved(+1, 0, direction, finalPlayerToBeMoved3);
+                                        break;
+
+                                    default:
+                                        break;
+                                });
+                    } */
+                        }
+
+                        }
+
+                    } catch(IOException e){
+                        throw new RuntimeException(e);
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
-            }
+
+
         }
     }
-
 }
-
