@@ -228,7 +228,10 @@ public class GUI extends Application {
             } else {
                 player.addPoints(1);
 
+                // Først opdater grafikken
                 fields[x][y].setGraphic(new ImageView(image_floor));
+
+                // Opdater x og y
                 x += delta_x;
                 y += delta_y;
 
