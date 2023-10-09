@@ -127,7 +127,7 @@ public class GUI extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
 
-            clientSocket = new Socket("localhost", 6789);
+            clientSocket = new Socket("10.10.139.182", 6789);
             ClientThread ct = new ClientThread(clientSocket);
             outToServer = new DataOutputStream(clientSocket.getOutputStream());
             inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -143,7 +143,7 @@ public class GUI extends Application {
 						så til andre GUI'er.
 
 						 */
-                            outToServer.writeBytes("UP" + '\n');
+                            outToServer.writeBytes("UP " +  me.name + '\n');
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
@@ -157,7 +157,7 @@ public class GUI extends Application {
 						så til andre GUI'er.
 
 						 */
-                            outToServer.writeBytes("DOWN" + '\n');
+                            outToServer.writeBytes("DOWN " + me.name + '\n');
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
@@ -171,7 +171,7 @@ public class GUI extends Application {
 						så til andre GUI'er.
 
 						 */
-                            outToServer.writeBytes("LEFT" + '\n');
+                            outToServer.writeBytes("LEFT " + me.name + '\n');
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
@@ -186,7 +186,7 @@ public class GUI extends Application {
 
 						 */
                             System.out.println("første playermoved");
-                            outToServer.writeBytes("RIGHT" + '\n');
+                            outToServer.writeBytes("RIGHT " + me.name + '\n');
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
@@ -199,13 +199,13 @@ public class GUI extends Application {
 
             // Setting up standard players
 
-            me = new Player("Orville", 9, 4, "up");
+            me = new Player("Orville", 14, 15, "up");
             players.add(me);
-            fields[9][4].setGraphic(new ImageView(hero_up));
-
-            Player harry = new Player("Harry", 14, 15, "up");
-            players.add(harry);
             fields[14][15].setGraphic(new ImageView(hero_up));
+
+            Player harry = new Player("Harry", 9, 4, "up");
+            players.add(harry);
+            fields[9][4].setGraphic(new ImageView(hero_up));
 
             scoreList.setText(getScoreList());
         } catch (Exception e) {
@@ -213,8 +213,15 @@ public class GUI extends Application {
         }
     }
 
-    public void playerMoved(int delta_x, int delta_y, String direction, Player player) {
+    public void playerMoved(int delta_x, int delta_y, String direction, String name) {
+		System.out.println(player.name);
         System.out.println("playerMoved called with direction: " + direction);
+		Player player1 = null;
+		for (Player player : players){
+			if(player.name.equals(name)){
+				player1 = player;
+			}
+		}
         player.direction = direction;
         int x = player.getXpos(), y = player.getYpos();
 
@@ -286,36 +293,38 @@ public class GUI extends Application {
         }
 
         public void run() {
-            String sentence;
             while (true) {
                 try {
                     /*sentence = inFromServer.readLine();
                     outToServer.writeBytes(sentence + '\n');*/
-                    String modifiedSentence = inFromServer.readLine();
+					String sentence = inFromServer.readLine();
+                    String direction = sentence.split(" ")[0];
+					String name = sentence.split(" ")[1];
 
-                    switch (modifiedSentence) {
+
+                    switch (direction) {
                         case "UP":
                             Platform.runLater(() -> {
-                                playerMoved(0, -1, modifiedSentence, players.get(1));
+                                playerMoved(0, -1, direction, name);
                             });
                             break;
 
                         case "DOWN":
                             Platform.runLater(() -> {
-                                playerMoved(0, +1, modifiedSentence, players.get(1));
+                                playerMoved(0, +1, direction, name);
                             });
                             break;
 
                         case "LEFT":
                             Platform.runLater(() -> {
-                                playerMoved(-1, 0, modifiedSentence, players.get(1));
+                                playerMoved(-1, 0, direction, name);
                             });
                             break;
 
                         case "RIGHT":
-                            System.out.println("anden swithc case: " + modifiedSentence);
+                            System.out.println("anden swithc case: " + direction);
                             Platform.runLater(() -> {
-                                playerMoved(+1, 0, modifiedSentence, players.get(1));
+                                playerMoved(+1, 0, direction, name);
                             });
                             break;
 
