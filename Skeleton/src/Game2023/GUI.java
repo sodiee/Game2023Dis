@@ -214,12 +214,12 @@ public class GUI extends Application {
     }
 
     public void playerMoved(int delta_x, int delta_y, String direction, String name) {
+		Player player = null;
 		System.out.println(player.name);
         System.out.println("playerMoved called with direction: " + direction);
-		Player player1 = null;
-		for (Player player : players){
-			if(player.name.equals(name)){
-				player1 = player;
+		for (Player p : players){
+			if(p.name.equals(name)){
+				player = p;
 			}
 		}
         player.direction = direction;
