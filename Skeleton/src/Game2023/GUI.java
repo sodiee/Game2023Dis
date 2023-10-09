@@ -214,7 +214,7 @@ public class GUI extends Application {
     }
 
     public void playerMoved(int delta_x, int delta_y, String direction, Player player) {
-        System.out.println("player moved");
+        System.out.println("playerMoved called with direction: " + direction);
         player.direction = direction;
         int x = player.getXpos(), y = player.getYpos();
 
@@ -228,26 +228,27 @@ public class GUI extends Application {
             } else {
                 player.addPoints(1);
 
-                // Først opdater grafikken
                 fields[x][y].setGraphic(new ImageView(image_floor));
-
-                // Opdater x og y
                 x += delta_x;
                 y += delta_y;
 
                 if (direction.equals("right")) {
+                    System.out.println("Setting graphic to hero_right at x=" + x + ", y=" + y);
                     fields[x][y].setGraphic(new ImageView(hero_right));
                 }
                 ;
                 if (direction.equals("left")) {
+                    System.out.println("Setting graphic to hero_left at x=" + x + ", y=" + y);
                     fields[x][y].setGraphic(new ImageView(hero_left));
                 }
                 ;
                 if (direction.equals("up")) {
+                    System.out.println("Setting graphic to hero_up at x=" + x + ", y=" + y);
                     fields[x][y].setGraphic(new ImageView(hero_up));
                 }
                 ;
                 if (direction.equals("down")) {
+                    System.out.println("Setting graphic to hero_down at x=" + x + ", y=" + y);
                     fields[x][y].setGraphic(new ImageView(hero_down));
                 }
                 ;
@@ -256,7 +257,7 @@ public class GUI extends Application {
                 player.setYpos(y);
             }
         }
-        System.out.println("player moved færdig");
+        System.out.println("playerMoved completed");
         scoreList.setText(getScoreList());
     }
 
