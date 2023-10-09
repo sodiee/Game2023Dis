@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -275,13 +276,13 @@ public class GUI extends Application {
 
 		public void run() {
 			String sentence;
-			String modifiedSentence;
 			while (true) {
 				try {
 					sentence = inFromServer.readLine();
 					outToServer.writeBytes(sentence + '\n');
-					modifiedSentence = inFromServer.readLine();
-					playerMoved(me.getXpos() - 1, me.getYpos() - 1, modifiedSentence, me);
+					String modifiedSentence = inFromServer.readLine();
+					Platform.runLater( () -> {
+					playerMoved(me.getXpos() - 1, me.getYpos() - 1, modifiedSentence, players.get(1));});
 					System.out.println("FROM SERVER: " + modifiedSentence);
 				} catch (IOException e) {
 					System.out.println(e.getMessage());
