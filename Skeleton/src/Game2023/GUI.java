@@ -136,7 +136,7 @@ public class GUI extends Application {
             scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 switch (event.getCode()) {
                     case UP:
-                        playerMoved(0, -1, "up", me);
+                        playerMoved(0, -1, "up", me.name);
                         try {
 						/*
 						get navn på spiller + direction og send til ST, ST opdaterer
@@ -150,7 +150,7 @@ public class GUI extends Application {
                         break;
 
                     case DOWN:
-                        playerMoved(0, +1, "down", me);
+                        playerMoved(0, +1, "down", me.name);
                         try {
 						/*
 						get navn på spiller + direction og send til ST, ST opdaterer
@@ -164,7 +164,7 @@ public class GUI extends Application {
                         break;
 
                     case LEFT:
-                        playerMoved(-1, 0, "left", me);
+                        playerMoved(-1, 0, "left", me.name);
                         try {
 						/*
 						get navn på spiller + direction og send til ST, ST opdaterer
@@ -178,7 +178,7 @@ public class GUI extends Application {
                         break;
 
                     case RIGHT:
-                        playerMoved(+1, 0, "right", me);
+                        playerMoved(+1, 0, "right", me.name);
                         try {
 						/*
 						get navn på spiller + direction og send til ST, ST opdaterer
@@ -215,7 +215,6 @@ public class GUI extends Application {
 
     public void playerMoved(int delta_x, int delta_y, String direction, String name) {
 		Player player = null;
-		System.out.println(player.name);
         System.out.println("playerMoved called with direction: " + direction);
 		for (Player p : players){
 			if(p.name.equals(name)){
