@@ -285,8 +285,8 @@ public class GUI extends Application {
             String sentence;
             while (true) {
                 try {
-                    sentence = inFromServer.readLine();
-                    outToServer.writeBytes(sentence + '\n');
+                    /*sentence = inFromServer.readLine();
+                    outToServer.writeBytes(sentence + '\n');*/
                     String modifiedSentence = inFromServer.readLine();
 
                     switch (modifiedSentence) {
