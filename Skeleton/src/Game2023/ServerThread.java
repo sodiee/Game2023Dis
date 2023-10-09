@@ -25,6 +25,7 @@ public class ServerThread extends Thread {
 
             while(true) {
                 String sentence = inFromClient.readLine();
+                System.out.println("sentence i ST: " + sentence);
                 Server.writeMethod(sentence);
             }
 

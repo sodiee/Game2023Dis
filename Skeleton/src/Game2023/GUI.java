@@ -185,6 +185,7 @@ public class GUI extends Application {
 						så til andre GUI'er.
 
 						 */
+                            System.out.println("første playermoved");
                             outToServer.writeBytes("RIGHT" + '\n');
                         } catch (Exception e) {
                             throw new RuntimeException(e);
@@ -213,6 +214,7 @@ public class GUI extends Application {
     }
 
     public void playerMoved(int delta_x, int delta_y, String direction, Player player) {
+        System.out.println("player moved");
         player.direction = direction;
         int x = player.getXpos(), y = player.getYpos();
 
@@ -251,6 +253,7 @@ public class GUI extends Application {
                 player.setYpos(y);
             }
         }
+        System.out.println("player moved færdig");
         scoreList.setText(getScoreList());
     }
 
@@ -306,6 +309,7 @@ public class GUI extends Application {
                             break;
 
                         case "RIGHT":
+                            System.out.println("anden swithc case: " + modifiedSentence);
                             Platform.runLater(() -> {
                                 playerMoved(+1, 0, modifiedSentence, players.get(1));
                             });
@@ -319,8 +323,6 @@ public class GUI extends Application {
                 }
             }
         }
-
-        ///platform.runlater()
     }
 
 }
