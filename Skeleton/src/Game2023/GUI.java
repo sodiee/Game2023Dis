@@ -41,6 +41,8 @@ public class GUI extends Application {
     static BufferedReader inFromServer;
     DataOutputStream outToServer;
 
+    static Player playerToBeMoved = null;
+
 
     private static String[] board = {    // 20x20
             "wwwwwwwwwwwwwwwwwwww",
@@ -265,7 +267,6 @@ public class GUI extends Application {
 
                     String name = sentence.split(" ")[1];
 
-                    Player playerToBeMoved = null;
                     for (Player p : players) {
                         if (p.name.equals(name)) {
                             playerToBeMoved = p;
@@ -273,22 +274,21 @@ public class GUI extends Application {
                     }
 
                     if (playerToBeMoved != null) {
-                        Player playerToBeMovedFinal = playerToBeMoved;
                         Platform.runLater(() -> {
                             System.out.println(name);
                             System.out.println(direction);
 
                             if (direction.equals("UP")) {
-                                playerMoved(0, -1, "UP", playerToBeMovedFinal);
+                                playerMoved(0, -1, "UP", playerToBeMoved);
                             }
                             if (direction.equals("DOWN")) {
-                                playerMoved(0, +1, "DOWN", playerToBeMovedFinal);
+                                playerMoved(0, +1, "DOWN", playerToBeMoved);
                             }
                             if (direction.equals("LEFT")) {
-                                playerMoved(-1, 0, "LEFT", playerToBeMovedFinal);
+                                playerMoved(-1, 0, "LEFT", playerToBeMoved);
                             }
                             if (direction.equals("RIGHT")) {
-                                playerMoved(+1, 0, "RIGHT", playerToBeMovedFinal);
+                                playerMoved(+1, 0, "RIGHT", playerToBeMoved);
                             }
                         });
 /*

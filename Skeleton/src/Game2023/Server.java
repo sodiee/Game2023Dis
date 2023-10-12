@@ -21,7 +21,7 @@ public class Server {
         }
     }
 
-    public static void writeMethod(String s) throws IOException {
+    public synchronized static  void  writeMethod(String s) throws IOException {
         for(ServerThread thread : threads){
             thread.writeBackToGUI(s);
             System.out.println("hej");
