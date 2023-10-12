@@ -137,12 +137,10 @@ public class GUI extends Application {
                 switch (event.getCode()) {
                     case UP:
                         try {
-                            outToServer.writeBytes("UP " +  me.name + '\n');
+                            outToServer.writeBytes("UP " + me.name + '\n');
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
-                        // Opdater din egen spillers position lokalt
-                        playerMoved(0, -1, "UP", me);
                         break;
                     case DOWN:
                         try {
@@ -150,8 +148,6 @@ public class GUI extends Application {
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
-                        // Opdater din egen spillers position lokalt
-                        playerMoved(0, 1, "DOWN", me);
                         break;
                     case LEFT:
                         try {
@@ -159,8 +155,6 @@ public class GUI extends Application {
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
-                        // Opdater din egen spillers position lokalt
-                        playerMoved(-1, 0, "LEFT", me);
                         break;
                     case RIGHT:
                         try {
@@ -168,8 +162,6 @@ public class GUI extends Application {
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
-                        // Opdater din egen spillers position lokalt
-                        playerMoved(1, 0, "RIGHT", me);
                         break;
                     default:
                         break;
@@ -178,13 +170,13 @@ public class GUI extends Application {
 
             // Setting up standard players
 
-            me = new Player("Lucas", 9, 4, "up");
+            me = new Player("Mikkel", 14, 15, "up");
             players.add(me);
-            fields[9][4].setGraphic(new ImageView(hero_up));
-
-            Player harry = new Player("Mikkel", 14, 15, "up");
-            players.add(harry);
             fields[14][15].setGraphic(new ImageView(hero_up));
+
+            Player harry = new Player("Lucas", 9, 4, "up");
+            players.add(harry);
+            fields[9][4].setGraphic(new ImageView(hero_up));
 
             scoreList.setText(getScoreList());
         } catch (Exception e) {
@@ -273,34 +265,32 @@ public class GUI extends Application {
 
                     String name = sentence.split(" ")[1];
 
-
-                    if (!name.equals(me.name)) {
-                        Player playerToBeMoved = null;
-                        for (Player p : players) {
-                            if (p.name.equals(name)) {
-                                playerToBeMoved = p;
-                            }
+                    Player playerToBeMoved = null;
+                    for (Player p : players) {
+                        if (p.name.equals(name)) {
+                            playerToBeMoved = p;
                         }
+                    }
 
-                        if (playerToBeMoved != null) {
-                            Player playerToBeMovedFinal = playerToBeMoved;
-                            Platform.runLater(() -> {
-                                System.out.println(name);
-                                System.out.println(direction);
+                    if (playerToBeMoved != null) {
+                        Player playerToBeMovedFinal = playerToBeMoved;
+                        Platform.runLater(() -> {
+                            System.out.println(name);
+                            System.out.println(direction);
 
-                                if (direction.equals("UP")) {
-                                    playerMoved(0, -1, "UP", playerToBeMovedFinal);
-                                }
-                                if (direction.equals("DOWN")) {
-                                    playerMoved(0, +1, "DOWN", playerToBeMovedFinal);
-                                }
-                                if (direction.equals("LEFT")) {
-                                    playerMoved(-1, 0, "LEFT", playerToBeMovedFinal);
-                                }
-                                if (direction.equals("RIGHT")) {
-                                    playerMoved(+1, 0, "RIGHT", playerToBeMovedFinal);
-                                }
-                            });
+                            if (direction.equals("UP")) {
+                                playerMoved(0, -1, "UP", playerToBeMovedFinal);
+                            }
+                            if (direction.equals("DOWN")) {
+                                playerMoved(0, +1, "DOWN", playerToBeMovedFinal);
+                            }
+                            if (direction.equals("LEFT")) {
+                                playerMoved(-1, 0, "LEFT", playerToBeMovedFinal);
+                            }
+                            if (direction.equals("RIGHT")) {
+                                playerMoved(+1, 0, "RIGHT", playerToBeMovedFinal);
+                            }
+                        });
 /*
                                 switch (direction) {
                                     case "UP":
@@ -328,14 +318,13 @@ public class GUI extends Application {
                                         break;
                                 });
                     } */
-                        }
-
-                        }
-
-                    } catch(IOException e){
-                        throw new RuntimeException(e);
                     }
+
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
+            }
 
 
         }
